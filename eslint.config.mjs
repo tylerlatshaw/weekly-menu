@@ -15,7 +15,9 @@ const eslintConfig = [
     rules: {
       semi: "error",
       "prefer-const": "warn",
-      "quotes": ["error", "double"]
+      "quotes": ["error", "double"],
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "warn"
     }
   }
 ];

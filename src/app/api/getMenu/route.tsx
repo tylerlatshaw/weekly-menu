@@ -1,9 +1,9 @@
-import { WeeklyMenu } from "@/components/document-builder";
+import { blob, WeeklyMenu } from "@/components/document-builder";
 import { NextResponse } from "next/server";
 
 export async function GET() {
     return NextResponse.json(
-        { message: WeeklyMenu },
+        { message: blob},
         { status: 200 }
     );
 }

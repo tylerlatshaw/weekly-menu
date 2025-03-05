@@ -21,7 +21,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 
 export default function DocumentBuilder() {
   
-  const startDate = dayjs(data[0].date);
+  const startDate = data[0].date;
   dayjs.extend(advancedFormat);
 
   Font.register({

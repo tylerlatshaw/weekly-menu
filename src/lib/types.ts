@@ -1,5 +1,7 @@
+import { Dayjs } from "dayjs";
+
 export type menuDataType = {
-    date: Date,
+    date: Dayjs,
     meal: string,
     prepRequired: boolean,
 };

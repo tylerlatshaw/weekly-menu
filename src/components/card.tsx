@@ -8,7 +8,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
 Card.displayName = "Card";
 
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ ...props }, ref) => (
-    <div ref={ref} className={"p-5 sm:p-8 h-full w-full items-center rounded-lg bg-gray-800 text-center font-medium tracking-tight transition ease-in-out hover:transition"}
+    <div ref={ref} className={"p-5 sm:p-8 h-full w-full items-center rounded-lg bg-gray-900/80 text-center font-medium tracking-tight transition ease-in-out hover:transition"}
         {...props}
     />
 ));

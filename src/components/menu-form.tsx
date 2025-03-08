@@ -1,113 +1,111 @@
 "use client";
 
-import { menuDataType } from "@/lib/types";
+import { menuDataType, menuFormInputs } from "@/lib/types";
 import dayjs, { Dayjs } from "dayjs";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { ArrowForward } from "@mui/icons-material";
-import { Switch, Button } from "@mui/material";
-import { useForm, SubmitHandler } from "react-hook-form";
-
-type Inputs = {
-    example: string
-    exampleRequired: string
-}
-
-type FieldInputs = {
-    date1: Dayjs
-}
+import { Switch, Button, FormControlLabel } from "@mui/material";
+import { useForm, SubmitHandler, useFieldArray, Controller } from "react-hook-form";
+import axios from "axios";
 
 export default function MenuForm() {
 
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
-    } = useForm<Inputs>();
+    } = useForm();
+    const onSubmit = async (formData: unknown) => {
+        // setSubmitState("Idle");
+        // setResponseMessage("");
+        // setLoadingState(true);
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+        // console.log(formData);
 
-    // const currentDate: Dayjs = dayjs(new Date().toLocaleString());
+        try {
+            const { data } = await axios.post("/api/generate-pdf", {
+                formData
+            } as unknown as menuFormInputs);
 
-    // const getNearestSunday = (date: Dayjs) => {
-    //     const dayOfWeek = date.day();
-    //     const diff = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
-    //     return date.add(diff, "day");
-    // };
+            // console.log(data);
 
-    // const [weekOf, setWeekOf] = useState<Dayjs>(getNearestSunday(currentDate));
+            // setResponseMessage(data);
+            // setSubmitState("Success");
+            // reset({
+            //     name: "",
+            //     email: "",
+            //     message: "",
+            // });
+        } catch (e) {
+            // setResponseMessage("Something went wrong. Please try again.");
+            // setSubmitState("Error");
+        }
 
-    // function createData(
-    //     date: menuDataType["date"],
-    //     meal: menuDataType["meal"],
-    //     prepRequired: menuDataType["prepRequired"]
-    // ) {
-    //     return { date, meal, prepRequired };
-    // }
+        // setLoadingState(false);
+    };
 
-    // const defaultData = [
-    //     createData(weekOf.add(0, "day"), "", false),
-    //     createData(weekOf.add(1, "day"), "", false),
-    //     createData(weekOf.add(2, "day"), "", false),
-    //     createData(weekOf.add(3, "day"), "", false),
-    //     createData(weekOf.add(4, "day"), "", false),
-    //     createData(weekOf.add(5, "day"), "", false),
-    //     createData(weekOf.add(6, "day"), "", false),
-    // ];
+    const currentDate: Dayjs = dayjs(new Date().toLocaleString());
+    const getNearestSunday = (date: Dayjs) => {
+        const dayOfWeek = date.day();
+        const diff = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
+        return date.add(diff, "day");
+    };
+    const [weekOf, setWeekOf] = useState<Dayjs>(getNearestSunday(currentDate));
+    const handleInputChange = (e: { target: { value: string; }; }) => {
+        setWeekOf(dayjs(e.target.value));
+    };
 
-    // const [inputData, setInputData] = useState<menuDataType[]>(defaultData);
+    function generateDesktopFields() {
+        const rows = [];
 
-    // const desktopTable = <>
-    //     <table className="h-full w-full items-center rounded-lg bg-gray-800 text-center font-medium tracking-tight transition ease-in-out hover:transition">
-    //         <thead>
-    //             <tr className="border-b-2 border-gray-900 divide-x-2 divide-gray-900">
-    //                 <th className="text-left">Date</th>
-    //                 <th align="left">Meal</th>
-    //                 <th align="left">Meal&nbsp;Prep?</th>
-    //             </tr>
-    //         </thead>
-    //         <tbody className="divide-y-2 divide-gray-900">
-    //             {inputData.map((row) => (
-    //                 <tr key={row.date.toString()} className="divide-x-2 divide-gray-900">
-    //                     <td className="text-left">
-    //                         <span className="text-base font-bold">{row.date.format("dddd")}</span>
-    //                         <br />
-    //                         <span className="font-normal">{row.date.format("M/D/YY")}</span>
-    //                     </td>
-    //                     <td className="text-left w-full">
-    //                         <input id={"meal" + row.date.toString()} required placeholder="Enter Meal" className="h-full w-full p-4 bg-gray-900 rounded-lg shadow-inner" />
-    //                     </td>
-    //                     <td className="text-center">
-    //                         <Switch id={"prepRequired-" + row.date.toString()} />
-    //                     </td>
-    //                 </tr>
-    //             ))}
-    //         </tbody>
-    //     </table>
-    // </>;
+        for (let i = 0; i < 7; i++) {
+            const rowDate = weekOf.add(i, "days");
+            rows.push(<tr key={i} className="">
+                <td className="text-left border border-gray-950">
+                    <span className="text-base font-bold">{rowDate.format("dddd")}</span>
+                    <br />
+                    <span className="font-normal">{rowDate.format("M/D/YY")}</span>
+                    <input {...register(`date${i}`)} hidden value={rowDate.format("M/D/YY")} />
+                </td>
+                <td className="text-left w-full border border-gray-950">
+                    <input {...register(`meal${i}`)} required placeholder="Enter Meal" className="h-full w-full p-4 rounded-lg bg-gray-800 border border-gray-950 drop-shadow-lg" />
+                </td>
+                <td className="text-center border border-gray-950">
+                    <label className="switch">
+                        <input {...register(`prepRequired${i}`)} type="checkbox" />
+                        <span className="slider round"></span>
+                    </label>
+                </td>
+            </tr>);
+        }
+
+        return <>
+            <table className="border-collapse h-full w-full items-center bg-gray-700 border outline outline-2 outline-gray-950 overflow-hidden drop-shadow-lg rounded-lg">
+                <thead>
+                    <tr className="">
+                        <th className="text-left border border-gray-950">Date</th>
+                        <th className="text-left border border-gray-950">Meal</th>
+                        <th className="text-left border border-gray-950">Meal&nbsp;Prep?</th>
+                    </tr>
+                </thead>
+                <tbody className="">
+                    {rows}
+                </tbody>
+            </table>
+        </>;
+    }
 
     return (
-        <div className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col rounded gap-6 text-left">
 
-            <div className="flex flex-col gap-1 font-semibold text-white">
-                <label htmlFor="weekOfInput" className="text-left">Week Of:</label>
-                <div className="border border-red-200">
-                    <div className="">
-                        {/* <input id="weekOfInput" required type="date" defaultValue={weekOf.format("YYYY-MM-DD")} className="h-full w-full p-4" /> */}
-                    </div>
-                </div>
+            <div className="flex flex-row items-center w-full gap-4">
+                <span className="text-lg font-semibold">Week Of:</span>
+                <input onChange={handleInputChange} type="date" defaultValue={weekOf.format("YYYY-MM-DD")} className="h-full grow p-2 sm:p-4 rounded-lg bg-gray-800 border border-gray-950 drop-shadow-lg" />
             </div>
 
-            <form className="flex flex-col border border-red-200 p-3 gap-3 text-left" onSubmit={handleSubmit(onSubmit)}>
-                <input {...register("example")} className="bg-gray-500 p-3" />
-                <div className="flex flex-col gap-1">
-                    <input {...register("exampleRequired", { required: true })} className="bg-gray-500 p-3" />
-                    {errors.exampleRequired && <span className="text-red-500">Enter a Meal</span>}
-                </div>
-                {/* {desktopTable} */}
+            {generateDesktopFields()}
 
-                <Button type="submit" variant="contained" endIcon={<ArrowForward />} className="w-fit">Generate PDF</Button>
-            </form>
-        </div>
+            <Button type="submit" variant="contained" className="flex items-center gap-2 w-fit"><span>Generate PDF</span><ArrowForward /></Button>
+        </form>
     );
 }

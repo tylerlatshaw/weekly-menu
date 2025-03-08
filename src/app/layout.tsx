@@ -31,7 +31,7 @@ export default function RootLayout({
       <body>
         {children}
 
-        <footer className={"flex flex-col place-self-center pb-6 gap-2 items-center " + prompt.className}>
+        <footer className={"flex flex-col place-self-center pb-6 gap-2 items-center text-white " + prompt.className}>
           <span>
             &copy; {dayjs().year()} <Link href={appSettings.author.url} target="_blank">{appSettings.author.name}</Link>. All rights reserved.
           </span>

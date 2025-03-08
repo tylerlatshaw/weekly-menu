@@ -26,17 +26,24 @@ export default function MenuForm() {
         // console.log(formData);
 
         try {
-            // const { data } = await axios.post("/api/generate-pdf", {
-            //     formData
-            // } as unknown as menuFormInputs);
+            const response = await axios.post("/api/generate-pdf", {
+                formData
+            }, { responseType: "blob" });
 
-            const { data } = await axios.get("/api/pdf-test");
+            // const response = await axios.get("/api/pdf-test", { responseType: "blob" });
 
-            const blob = new Blob([data], { type: "application/pdf" });
-            const blobURL = URL.createObjectURL(blob);
-            window.open(blobURL);
+            const blob = new Blob([response.data], { type: "application/pdf" });
+            const blobURL = window.URL.createObjectURL(blob);
 
-            console.log(blob);
+            const templink = document.createElement("a");
+            templink.href = blobURL;
+            templink.setAttribute("download", "testfile.pdf");
+            document.body.appendChild(templink);
+
+            window.open(templink.toString());
+
+            document.body.removeChild(templink);
+            window.URL.revokeObjectURL(blobURL);
 
 
 
@@ -81,10 +88,11 @@ export default function MenuForm() {
                     <input {...register(`date${i}`)} hidden value={rowDate.format("M/D/YY")} />
                 </td>
                 <td className="text-left w-full border border-gray-950">
-                    <input {...register(`meal.${i}`, { required: "Enter a meal for " + rowDate.format("dddd") })} placeholder="Enter Meal" className="h-full w-full p-4 rounded-lg bg-gray-800 border border-gray-950 drop-shadow-lg mb-2" />
+                    {/* <input {...register(`meal.${i}`, { required: "Enter a meal for " + rowDate.format("dddd") })} placeholder="Enter Meal" className="h-full w-full p-4 rounded-lg bg-gray-800 border border-gray-950 drop-shadow-lg mb-2" />
                     <span className="text-red-400 font-semibold">
                         <ErrorMessage errors={errors} name={`meal.${i}`} />
-                    </span>
+                    </span> */}
+                    <input {...register(`meal${i}`)} placeholder="Enter Meal" className="h-full w-full p-4 rounded-lg bg-gray-800 border border-gray-950 drop-shadow-lg mb-2" />
                 </td>
                 <td className="text-center border border-gray-950">
                     <label className="switch">

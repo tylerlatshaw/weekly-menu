@@ -1,5 +1,6 @@
-import { menuDataType, menuFormInputs } from "@/lib/types";
-import { Document, Page, Text, renderToBuffer } from "@react-pdf/renderer";
+import DocumentBuilder from "@/components/document-builder";
+import { menuDataType } from "@/lib/types";
+import { renderToBuffer } from "@react-pdf/renderer";
 
 export async function POST(request: Request) {
     const formData = await request.json().then(data => { return data.formData; });
@@ -15,11 +16,7 @@ export async function POST(request: Request) {
     }
 
     const pdf = await renderToBuffer(
-        <Document>
-            <Page>
-                <Text>{formData.meal0} </Text>
-            </Page>
-        </Document>
+        <DocumentBuilder />
     );
 
     return new Response(pdf, {

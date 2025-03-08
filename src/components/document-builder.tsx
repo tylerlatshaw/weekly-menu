@@ -1,12 +1,8 @@
 /* eslint-disable jsx-a11y/alt-text */
-"use client";
 
-import { data } from "@/lib/test-data";
 import {
   Document,
   Page,
-  PDFViewer,
-  PDFDownloadLink,
   StyleSheet,
   Text,
   Font,
@@ -17,60 +13,62 @@ import {
 } from "@react-pdf/renderer";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
-import DownloadIcon from "@mui/icons-material/Download";
+import { menuDataType } from "@/lib/types";
+import { data } from "@/lib/test-data";
+import { appSettings } from "../../app-settings";
 
 export default function DocumentBuilder() {
-  
+
   const startDate = data[0].date;
   dayjs.extend(advancedFormat);
 
-  Font.register({
-    family: "Kanit", fonts: [
-      {
-        src: "/fonts/Kanit-Thin.ttf",
-        fontWeight: 100,
-      },
-      {
-        src: "/fonts/Kanit-ExtraLight.ttf",
-        fontWeight: 200,
-      },
-      {
-        src: "/fonts/Kanit-Light.ttf",
-        fontWeight: 300,
-      },
-      {
-        src: "/fonts/Kanit-Regular.ttf",
-        fontWeight: 400,
-      },
-      {
-        src: "/fonts/Kanit-Medium.ttf",
-        fontWeight: 500,
-      },
-      {
-        src: "/fonts/Kanit-SemiBold.ttf",
-        fontWeight: 600,
-      },
-      {
-        src: "/fonts/Kanit-Bold.ttf",
-        fontWeight: 700,
-      },
-      {
-        src: "/fonts/Kanit-ExtraBold.ttf",
-        fontWeight: 800,
-      },
-      {
-        src: "/fonts/Kanit-Black.ttf",
-        fontWeight: 900,
-      }
-    ]
-  });
+  // Font.register({
+  //   family: "Kanit", fonts: [
+  //     {
+  //       src: "/fonts/Kanit-Thin.ttf",
+  //       fontWeight: 100,
+  //     },
+  //     {
+  //       src: "/fonts/Kanit-ExtraLight.ttf",
+  //       fontWeight: 200,
+  //     },
+  //     {
+  //       src: "/fonts/Kanit-Light.ttf",
+  //       fontWeight: 300,
+  //     },
+  //     {
+  //       src: "/fonts/Kanit-Regular.ttf",
+  //       fontWeight: 400,
+  //     },
+  //     {
+  //       src: "/fonts/Kanit-Medium.ttf",
+  //       fontWeight: 500,
+  //     },
+  //     {
+  //       src: "/fonts/Kanit-SemiBold.ttf",
+  //       fontWeight: 600,
+  //     },
+  //     {
+  //       src: "/fonts/Kanit-Bold.ttf",
+  //       fontWeight: 700,
+  //     },
+  //     {
+  //       src: "/fonts/Kanit-ExtraBold.ttf",
+  //       fontWeight: 800,
+  //     },
+  //     {
+  //       src: "/fonts/Kanit-Black.ttf",
+  //       fontWeight: 900,
+  //     }
+  //   ]
+  // });
 
   const styles = StyleSheet.create({
     page: {
       flexDirection: "column",
       backgroundColor: "white",
       marginTop: "24px",
-      fontFamily: "Kanit",
+      // fontFamily: "Kanit",
       fontSize: "12pt",
       textAlign: "center",
       marginLeft: "auto",
@@ -176,12 +174,12 @@ export default function DocumentBuilder() {
 
   const prepRequiredAlert = <>
     <View style={styles.prepRequiredSection}>
-      <Image src={"/prep-required-icon.png"} style={styles.prepRequiredAlertIcon} />
+      <Image src={appSettings.baseUrl + "/prep-required-icon.png"} style={styles.prepRequiredAlertIcon} />
       <Text style={styles.prepRequiredAlertText}>Prep Required</Text>
     </View>
   </>;
 
-  const document = (
+  return (
     <Document title={"Weekly Menu: " + startDate.format("M/D/YY")} author="Tyler J Latshaw">
       <Page size={"LETTER"} style={styles.page}>
 
@@ -222,18 +220,6 @@ export default function DocumentBuilder() {
 
       </Page>
     </Document>
-  );
-
-  return (
-    <div className="flex flex-col w-full h-full gap-4">
-      <div className="flex flex-row justify-between">
-        <h2 className="text-xl md:text-2xl lg:text-3xl"><b>Menu for the Week Of: </b>{startDate.format("MMMM Do")}</h2>
-
-        <PDFDownloadLink document={document} fileName={"menu_" + startDate.format("YYYY-MM-DD")} className="hidden lg:block w-fit bg-cyan-900 px-4 py-2 text-lg shadow rounded font-semibold">Download <DownloadIcon /></PDFDownloadLink>
-      </div>
-
-      <PDFViewer className="w-full h-full">{document}</PDFViewer>
-    </div>
   );
 
 }

@@ -73,6 +73,7 @@ export default function MenuForm() {
 
         for (let i = 0; i < 7; i++) {
             const rowDate = weekOf.add(i, "days");
+
             rows.push(<tr key={i}>
                 <td className="text-left border border-gray-950">
                     <span className="text-base font-bold">{rowDate.format("dddd")}</span>
@@ -111,6 +112,45 @@ export default function MenuForm() {
         </>;
     }
 
+    function generateMobileFields() {
+        const rows = [];
+
+        for (let i = 0; i < 7; i++) {
+            const rowDate = weekOf.add(i, "days");
+
+            rows.push(<div key={i} className="flex flex-col gap-2 py-4">
+                <div className="flex flex-row items-center justify-between">
+                    <div>
+                        <span className="text-base font-bold">{rowDate.format("dddd")}</span>
+                        <span className="font-normal"> - {rowDate.format("M/D/YY")}</span>
+                        <input {...register(`date${i}`)} hidden value={rowDate.format("M/D/YY")} />
+                    </div>
+
+                    <div className="flex flex-row gap-2 items-center">
+                        <span>Prep?</span>
+                        <label className="switch">
+                            <input {...register(`prepRequired${i}`)} type="checkbox" />
+                            <span className="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <input {...register(`meal.${i}`, { required: "Enter a meal for " + rowDate.format("dddd") })} placeholder="Enter Meal" className="h-full w-full px-2 py-3 rounded-lg bg-gray-800 border border-gray-950 drop-shadow-lg mb-2" />
+                    <span className="text-red-400 font-semibold">
+                        <ErrorMessage errors={errors} name={`meal.${i}`} />
+                    </span>
+                </div>
+            </div>);
+        }
+
+        return <>
+            <div className="flex flex-col border-y border-gray-500 divide-y divide-gray-500">
+                {rows}
+            </div>
+        </>;
+    }
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col rounded gap-6 text-left text-white">
 
@@ -119,12 +159,18 @@ export default function MenuForm() {
                 <input {...register("weekOfInput")} onChange={handleDateChange} type="date" defaultValue={weekOf.format("YYYY-MM-DD")} className="h-full grow p-2 sm:p-4 rounded-lg bg-gray-800 border border-gray-950 drop-shadow-lg" />
             </div>
 
-            {generateDesktopFields()}
+            <div className="hidden md:contents">
+                {generateDesktopFields()}
+            </div>
 
-            <div className="flex flex-row gap-4 justify-between">
-                <Button type="submit" variant="contained" className="flex items-center gap-2 w-fit" style={{ backgroundColor: green[600], padding: "12px 28px" }}><span>Generate PDF</span>{loadingState ? <CircularProgress size={16} sx={{ color: "white" }} /> : <ArrowForward />}</Button>
+            <div className="contents md:hidden">
+                {generateMobileFields()}
+            </div>
 
-                <Button type="reset" onClick={() => { setWeekOf(getNearestSunday(currentDate)); clearErrors(); clearPrepRequired(); }} variant="outlined" className="flex items-center gap-2 w-fit" style={{ borderColor: red[600], color: red[600], padding: "12px 28px" }}><span>Reset</span><DeleteOutline /></Button>
+            <div className="flex flex-col md:flex-row md:justify-between gap-4">
+                <Button type="submit" variant="contained" className="flex items-center gap-2 w-full md:w-fit" style={{ backgroundColor: green[600], padding: "12px 28px" }}><span>Generate PDF</span>{loadingState ? <CircularProgress size={16} sx={{ color: "white" }} /> : <ArrowForward />}</Button>
+
+                <Button type="reset" onClick={() => { setWeekOf(getNearestSunday(currentDate)); clearErrors(); clearPrepRequired(); }} variant="outlined" className="flex items-center gap-2 w-full md:w-fit" style={{ borderColor: red[600], color: red[600], padding: "12px 28px" }}><span>Reset</span><DeleteOutline /></Button>
             </div>
         </form>
     );

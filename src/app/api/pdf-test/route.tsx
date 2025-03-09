@@ -1,4 +1,4 @@
-import { menuDataType, menuFormInputs } from "@/lib/types";
+import { menuDataType } from "@/lib/types";
 import { Document, Page, Text, renderToBuffer } from "@react-pdf/renderer";
 
 export async function POST(request: Request) {

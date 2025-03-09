@@ -161,7 +161,7 @@ export const headerLine = <>
 
 export const prepRequiredAlert = <>
   <View style={styles.prepRequiredSection}>
-    <PDFImage src={appSettings.baseUrl + "/prep-required-icon.png"} style={styles.prepRequiredAlertIcon} />
+    <PDFImage src={process.env.BASE_URL + "/prep-required-icon.png"} style={styles.prepRequiredAlertIcon} />
     <Text style={styles.prepRequiredAlertText}>Prep Required</Text>
   </View>
 </>;

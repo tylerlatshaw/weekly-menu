@@ -7,7 +7,6 @@ import {
   Svg,
 } from "@react-pdf/renderer";
 import { Image as PDFImage } from "@react-pdf/renderer";
-import { appSettings } from "../../app-settings";
 
 Font.register({
   family: "Kanit", fonts: [

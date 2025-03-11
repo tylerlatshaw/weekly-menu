@@ -53,15 +53,6 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
-
-        <footer className={"flex flex-col place-self-center pb-6 gap-2 items-center text-white " + prompt.className}>
-          <span>
-            &copy; {dayjs().year()} <Link href={appSettings.author.url} target="_blank">{appSettings.author.name}</Link>. All rights reserved.
-          </span>
-          <span className="text-sm">
-            Image by <Link href="https://pixabay.com/users/merinthurasang77-5404727/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=2325209" target="_blank">merinthurasang77</Link> from <Link href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=2325209" target="_blank">Pixabay</Link>
-          </span>
-        </footer>
       </body>
     </html>
   );

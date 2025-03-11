@@ -161,22 +161,27 @@ export default function MenuForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col rounded gap-6 text-left text-white">
+        <div className="h-full overflow-hidden">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col h-full rounded gap-4 text-left text-white">
 
-            <div className="flex flex-row items-center w-full gap-4">
-                <span className="text-lg font-semibold">Week Of:</span>
-                <input {...register("weekOfInput")} onChange={handleDateChange} type="date" defaultValue={weekOf.format("YYYY-MM-DD")} className="h-full grow p-3 sm:p-4 rounded-lg bg-gray-800 border border-gray-950 drop-shadow-lg" />
-            </div>
+                <div className="flex flex-row items-center w-full gap-4">
+                    <span className="text-lg font-semibold">Week Of:</span>
+                    <input {...register("weekOfInput")} onChange={handleDateChange} type="date" defaultValue={weekOf.format("YYYY-MM-DD")} className="h-full grow p-2 sm:p-3 rounded-lg bg-zinc-900 inset-shadow-sm inset-shadow-zinc-950" />
+                </div>
 
-            {
-                windowWidth < 768 ? generateMobileFields() : generateDesktopFields()
-            }
+                <div className="grow p-4 bg-zinc-900 rounded-lg overflow-y-auto no-scrollbar inset-shadow-sm inset-shadow-zinc-950">
+                    {
+                        windowWidth < 768 ? generateMobileFields() : generateDesktopFields()
+                    }
+                </div>
 
-            <div className="flex flex-col md:flex-row md:justify-between gap-4">
-                <Button type="submit" variant="contained" className="flex items-center gap-2 w-full md:w-fit" style={{ backgroundColor: green[600], padding: "12px 28px" }}><span>Generate PDF</span>{loadingState ? <CircularProgress size={16} sx={{ color: "white" }} /> : <ArrowForward />}</Button>
+                <div className="flex flex-col md:flex-row md:justify-between gap-4">
+                    <Button type="submit" variant="contained" className="flex items-center gap-2 w-full md:w-fit" style={{ backgroundColor: green[600], padding: "12px 28px" }}><span>Generate PDF</span>{loadingState ? <CircularProgress size={16} sx={{ color: "white" }} /> : <ArrowForward />}</Button>
 
-                <Button type="reset" onClick={() => { setWeekOf(getNearestSunday(currentDate)); clearErrors(); clearPrepRequired(); resetDates(); }} variant="outlined" className="flex items-center gap-2 w-full md:w-fit" style={{ borderColor: red[600], color: red[600], padding: "12px 28px" }}><span>Reset</span><DeleteOutline /></Button>
-            </div>
-        </form>
+                    <Button type="reset" onClick={() => { setWeekOf(getNearestSunday(currentDate)); clearErrors(); clearPrepRequired(); resetDates(); }} variant="outlined" className="flex items-center gap-2 w-full md:w-fit" style={{ borderColor: red[600], color: red[600], padding: "12px 28px" }}><span>Reset</span><DeleteOutline /></Button>
+                </div>
+
+            </form>
+        </div>
     );
 }

@@ -20,8 +20,8 @@ export default function Home() {
 
         <div className="flex z-10 w-2/5 h-screen bg-zinc-800 overflow-hidden">
           <div className="flex flex-col w-full p-16 gap-8">
-            <div className="flex flex-col gap-1">
-              <h2 className={"text-2xl sm:text-4xl font-semibold text-white tracking-wide " + prompt.className}>Build Your Menu <ArrowForwardIos fontSize="medium" /></h2>
+            <div className="flex flex-col gap-1 text-white">
+              <h2 className={"text-2xl sm:text-4xl font-semibold tracking-wide " + prompt.className}>Build Your Menu <ArrowForwardIos fontSize="medium" /></h2>
               <span className={"text-lg " + prompt.className}>Enter your meals to organize your week.</span>
             </div>
             <MenuForm />

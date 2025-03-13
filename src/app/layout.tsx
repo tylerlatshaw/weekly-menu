@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { appSettings } from "../../app-settings";
-import dayjs from "dayjs";
-import Link from "next/link";
-import { Prompt } from "next/font/google";
 
 export const metadata: Metadata = {
   metadataBase: new URL(appSettings.baseUrl!),
@@ -36,13 +33,6 @@ export const metadata: Metadata = {
     creator: "@tylerlatshaw"
   }
 };
-
-const prompt = Prompt({
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export default function RootLayout({
   children,

@@ -1,5 +1,4 @@
 import { headerLine, prepRequiredAlert, styles } from "@/components/document-components";
-import { menuDataType } from "@/lib/types";
 import {
     Document,
     Page,
@@ -7,7 +6,13 @@ import {
     View,
     renderToBuffer
 } from "@react-pdf/renderer";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+
+type menuDataType = {
+    date: Dayjs,
+    meal: string,
+    prepRequired: boolean,
+};
 
 export async function POST(request: Request) {
     const formData = await request.json().then(data => { return data.formData; });

@@ -1,7 +1,6 @@
-import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
 
-export default nextConfig;
+export default withSentryConfig(nextConfig);

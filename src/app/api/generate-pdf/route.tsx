@@ -72,7 +72,7 @@ export async function POST(request: Request) {
         </Document>
     );
 
-    return new Response(pdf, {
+    return new Response(pdf as unknown as BodyInit, {
         headers: {
             "Content-Type": "application/pdf",
             "Content-disposition": "attachment; filename=\"filename.pdf\"",
